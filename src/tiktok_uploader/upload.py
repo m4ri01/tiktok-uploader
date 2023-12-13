@@ -344,7 +344,6 @@ def _set_video(driver, path: str = '', num_retries: int = 3, **kwargs) -> None:
                 )
 
             WebDriverWait(driver, config['explicit_wait']).until(upload_finished)
-
             # waits for the video to upload
             upload_confirmation = EC.presence_of_element_located(
                 (By.XPATH, config['selectors']['upload']['upload_confirmation'])
@@ -352,12 +351,11 @@ def _set_video(driver, path: str = '', num_retries: int = 3, **kwargs) -> None:
 
             # An exception throw here means the video failed to upload an a retry is needed
             WebDriverWait(driver, config['explicit_wait']).until(upload_confirmation)
-
             # wait until a non-draggable image is found
-            process_confirmation = EC.presence_of_element_located(
-                (By.XPATH, config['selectors']['upload']['process_confirmation'])
-                )
-            WebDriverWait(driver, config['explicit_wait']).until(process_confirmation)
+            # process_confirmation = EC.presence_of_element_located(
+            #     (By.XPATH, config['selectors']['upload']['process_confirmation'])
+            #     )
+            # WebDriverWait(driver, config['explicit_wait']).until(process_confirmation)
             return
         except Exception as exception:
             print(exception)
@@ -404,6 +402,8 @@ def _remove_split_window(driver) -> None:
             
     except TimeoutException:
         logger.debug(red(f"Split window not found or operation timed out"))
+    except Exception as e:
+        logger.debug(red(f"Failed to remove split window"))
         
 
 def _set_interactivity(driver, comment=True, stitch=True, duet=True, *args, **kwargs) -> None:
